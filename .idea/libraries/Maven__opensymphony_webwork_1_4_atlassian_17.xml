@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: opensymphony:webwork:1.4-atlassian-17">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/opensymphony/webwork/1.4-atlassian-17/webwork-1.4-atlassian-17.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/opensymphony/webwork/1.4-atlassian-17/webwork-1.4-atlassian-17-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/opensymphony/webwork/1.4-atlassian-17/webwork-1.4-atlassian-17-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,21 +1,43 @@
 (function() {
-    var fieldGroupDiv = jQuery('<div/>',{
-            class : 'field-group'
-        });
-    var actionRef = "http://www.google.com";
+    var fieldGroupDiv = jQuery('<div/>', {
+        id : 'pressure-field-group'
+    }).addClass('field-group');
+    var actionRef = "UserPressureAction.jspa";
+    var assigneeFieldSelector = '#assignee-field';
+    var assigneeField = jQuery(assigneeFieldSelector);
     var pressureLink = jQuery('<a/>',{
            href : actionRef,
-           text : "lolgoogle"
-       });
+           text : 'link',
+           id : 'pressure-link'
+       }).addClass('trigger-dialog');
+
     var pressureHtml = fieldGroupDiv.append(pressureLink);
 
-    jQuery(document).delegate("#assignee-field","click", function(){
-        var ascentorDiv = jQuery('#assignee-field').closest('div.field-group') ;
+    jQuery(document).delegate(assigneeFieldSelector,"click", function(){
+        new JIRA.FormDialog({
+            trigger: pressureLink,
+            id: pressureLink.id + "-dialog",
+            ajaxOptions: {
+                url: pressureLink.href,
+                data: {
+                    decorator: "dialog",
+                    inline: "true"
+                }
+            }
+        });
+        var ascentorDiv = jQuery(assigneeFieldSelector).closest('div.field-group');
         pressureHtml.insertAfter(ascentorDiv);
+        pressureHtml.hide();
     });
     jQuery(document).delegate("#assignee-suggestions a","click", function(){
-        console.log('log');
-        jQuery(pressureLink).attr('href','GOGAL');
+        var assignee = jQuery(assigneeFieldSelector).val();
+        if (assignee === 'Automatic') {
+           pressureHtml.hide();
+        } else {
+           pressureHtml.show();
+           pressureLink.attr('href',actionRef + '?user=' + assignee);
+        }
+
     });
 
 })();

@@ -1,0 +1,3 @@
+#foreach($issue in $issues)
+    $issue.getKey();
+#end

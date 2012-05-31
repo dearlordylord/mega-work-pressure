@@ -8,4 +8,11 @@
         <resource type="download" name="megaplan-work-pressure.js" location="ru/megaplan/jira/plugins/megaworkpressure/js/megaplan-work-pressure.js" />
         <context>jira.general</context>
     </web-resource>
+    <webwork1 key="mega-pressure-actions" name="Mega Pressure plugin actions">
+        <actions>
+            <action name="ru.megaplan.jira.plugins.megaworkpressure.action.UserPressureAction" alias="UserPressureAction">
+                <view name="success">/ru/megaplan/jira/plugins/megaworkpressure/velocity/viewPressure.vm</view>
+            </action>
+        </actions>
+    </webwork1>
 </atlassian-plugin>
