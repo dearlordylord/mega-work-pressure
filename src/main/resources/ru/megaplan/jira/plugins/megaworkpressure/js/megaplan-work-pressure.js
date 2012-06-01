@@ -1,4 +1,5 @@
 (function() {
+
     var fieldGroupDiv = jQuery('<div/>', {
         id : 'pressure-field-group'
     }).addClass('field-group');
