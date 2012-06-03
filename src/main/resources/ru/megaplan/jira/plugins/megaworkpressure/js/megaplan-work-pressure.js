@@ -1,5 +1,4 @@
 (function() {
-
     var fieldGroupDiv = jQuery('<div/>', {
         id : 'pressure-field-group'
     }).addClass('field-group');
@@ -8,7 +7,7 @@
     var assigneeField = jQuery(assigneeFieldSelector);
     var pressureLink = jQuery('<a/>',{
            href : actionRef,
-           text : 'link',
+           text : 'Задачи на этом пользователе',
            id : 'pressure-link'
        }).addClass('trigger-dialog');
 
@@ -22,7 +21,7 @@
                 url: pressureLink.href,
                 data: {
                     decorator: "dialog",
-                    inline: "true"
+                    inline: "true",
                 }
             }
         });

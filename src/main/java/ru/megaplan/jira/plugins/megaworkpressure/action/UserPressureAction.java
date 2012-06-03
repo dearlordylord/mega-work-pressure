@@ -2,6 +2,7 @@ package ru.megaplan.jira.plugins.megaworkpressure.action;
 
 import com.atlassian.crowd.embedded.api.User;
 import com.atlassian.jira.bc.issue.search.SearchService;
+import com.atlassian.jira.config.properties.PropertiesManager;
 import com.atlassian.jira.issue.Issue;
 import com.atlassian.jira.issue.search.SearchException;
 import com.atlassian.jira.issue.search.SearchResults;
@@ -14,6 +15,7 @@ import com.atlassian.jira.user.util.UserManager;
 import com.atlassian.jira.web.action.JiraWebActionSupport;
 import com.atlassian.jira.web.bean.PagerFilter;
 import com.atlassian.query.Query;
+import webwork.action.ServletActionContext;
 
 import java.util.List;
 
@@ -26,7 +28,7 @@ import java.util.List;
  */
 public class UserPressureAction extends JiraWebActionSupport {
 
-    Issue[] issues;
+
 
     private final UserManager userManager;
     private final JiraAuthenticationContext jiraAuthenticationContext;
@@ -34,8 +36,12 @@ public class UserPressureAction extends JiraWebActionSupport {
     private final UserProjectHistoryManager userProjectHistoryManager;
     private final SearchService searchService;
 
+    Issue[] issues;
+    //private final String baseUrl;
+
     public UserPressureAction(UserManager userManager, JiraAuthenticationContext jiraAuthenticationContext,
-    PermissionManager permissionManager, UserProjectHistoryManager userProjectHistoryManager, SearchService searchService) {
+    PermissionManager permissionManager, UserProjectHistoryManager userProjectHistoryManager, SearchService searchService
+    ) {
         this.userManager = userManager;
         this.jiraAuthenticationContext = jiraAuthenticationContext;
         this.permissionManager = permissionManager;
@@ -73,4 +79,9 @@ public class UserPressureAction extends JiraWebActionSupport {
     public void setIssues(Issue[] issues) {
         this.issues = issues;
     }
+
+//    public String getBaseUrl() {
+//        return baseUrl;
+//    }
+
 }

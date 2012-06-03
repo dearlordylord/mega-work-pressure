@@ -38,7 +38,7 @@
     <orderEntry type="library" scope="TEST" name="Maven: jaxen:jaxen:1.1.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: mockobjects:alt-jdk1.3:0.07" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.atlassian.extras:atlassian-extras:2.2.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: commons-codec:commons-codec:1.3" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: commons-codec:commons-codec:1.4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.atlassian.velocity:atlassian-velocity:1.0.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: opensymphony:oscore:2.2.7-atlassian-1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: velocity:velocity:1.4" level="project" />
@@ -60,7 +60,7 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.atlassian.plugins:atlassian-plugins-core:2.10.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.slf4j:slf4j-api:1.5.8" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.atlassian.event:atlassian-event:2.0.4" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: com.google.collections:google-collections:1.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.collections:google-collections:1.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.atlassian.multitenant:multitenant-core:1.0-m14" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: javax.servlet:servlet-api:2.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: net.jcip:jcip-annotations:1.0" level="project" />
@@ -76,6 +76,17 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: quartz:quartz:1.5.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.atlassian.profiling:atlassian-profiling:1.8.2" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.servlet:javax.servlet-api:3.0.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: ru.megaplan.jira.plugins:megaplan-permission-manager:1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.atlassian.activeobjects:activeobjects-plugin:1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: net.java.dev.activeobjects:activeobjects:0.9-m18" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.lucene:lucene-queries:2.2.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.atlassian.activeobjects:activeobjects-core:1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.atlassian.activeobjects:activeobjects-spi:1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.atlassian.activeobjects:activeobjects-dbex:1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: net.java.dev.stax-utils:stax-utils:20060502" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.codehaus.woodstox:woodstox-core-asl:4.1.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.codehaus.woodstox:stax2-api:3.1.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: hsqldb:hsqldb:1.8.0.7" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.8.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.atlassian.jira:jira-tests:5.0.5" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit-dep:4.8.1" level="project" />
@@ -149,7 +160,6 @@
     <orderEntry type="library" scope="TEST" name="Maven: jmock:jmock:1.1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework:spring-test:2.5.6.SEC02" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: javax.transaction:jta:1.0.1B" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: hsqldb:hsqldb:1.8.0.10" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.dbunit:dbunit:2.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit-addons:junit-addons:1.4" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: xerces:xmlParserAPIs:2.6.2" level="project" />

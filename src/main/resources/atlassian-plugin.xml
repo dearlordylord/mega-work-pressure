@@ -6,7 +6,6 @@
     </plugin-info>
     <web-resource key="megaplan-workflow-pressure-mainjs" name="Mainjs" >
         <resource type="download" name="megaplan-work-pressure.js" location="ru/megaplan/jira/plugins/megaworkpressure/js/megaplan-work-pressure.js" />
-        <context>jira.general</context>
     </web-resource>
     <webwork1 key="mega-pressure-actions" name="Mega Pressure plugin actions">
         <actions>
@@ -15,4 +14,23 @@
             </action>
         </actions>
     </webwork1>
+
+    <component-import key="megaplan-permission-group-manager-import" name="Permission Manager service"
+                      interface="ru.megaplan.jira.plugins.permission.manager.ao.MegaPermissionGroupManager">
+        <description>Component to access Active Objects functionality from the plugin</description>
+    </component-import>
+
+    <servlet-filter name="Mega work pressure Servlet Filter" key="megaWorkPressureServletFilter"
+                    class="ru.megaplan.jira.plugins.megaworkpressure.servlet.filter.UserPressureServletFilter"
+                    location="before-decoration" weight="200">
+        <description>Mega work pressure Servlet Filter.</description>
+        <url-pattern>/secure/*</url-pattern>
+        <init-param>
+            <param-name>defaultName</param-name>
+            <param-value>Australia</param-value>
+        </init-param>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+    </servlet-filter>
 </atlassian-plugin>

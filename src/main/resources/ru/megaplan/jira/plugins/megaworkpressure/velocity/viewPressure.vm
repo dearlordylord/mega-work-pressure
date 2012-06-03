@@ -1,3 +1,20 @@
-#foreach($issue in $issues)
-    $issue.getKey();
-#end
+<table id="issuetable">
+    <thead>
+        <tr class="rowheader">
+            <th class="active descending headerrow-priority">P</th>
+            <th class="colHeaderLink headerrow-issuekey">Key</th>
+            <th class="colHeaderLink headerrow-summary">Summary</th>
+            <th class="colHeaderLink headerrow-status">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        #foreach($issue in $issues)
+            <tr class="issuerow">
+                <td class="nav priority"><img src="$baseurl$issue.priorityObject.iconUrlHtml"/></td>
+                <td class="nav issuekey"><a href="$baseurl/browse/$issue.key">$issue.key</a></td>
+                <td class="nav summary"><a href="$baseurl/browse/$issue.key">$issue.summary</a></td>
+                <td class="nav status"><img src="$baseurl$issue.statusObject.iconUrlHtml"/>$issue.statusObject.nameTranslation</td>
+            </tr>
+        #end
+    </tbody>
+</table>
