@@ -53,6 +53,7 @@ public class UserPressureAction extends JiraWebActionSupport {
     public String doExecute() {
         User loggedInUser = jiraAuthenticationContext.getLoggedInUser();
         User u = userManager.getUser(request.getParameter("user"));
+        if (u == null) return ERROR;
         Project currentProject = userProjectHistoryManager.getCurrentProject(Permissions.CREATE_ISSUE, loggedInUser);
         String jqlQuery = "project="+currentProject.getKey()+" and assignee="+u.getName();
         SearchService.ParseResult parseResult = searchService.

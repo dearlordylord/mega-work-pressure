@@ -5,6 +5,8 @@
         <vendor name="${project.organization.name}" url="${project.organization.url}" />
     </plugin-info>
     <web-resource key="megaplan-workflow-pressure-mainjs" name="Mainjs" >
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+        <dependency>jira.webresources:jira-global</dependency>
         <resource type="download" name="megaplan-work-pressure.js" location="ru/megaplan/jira/plugins/megaworkpressure/js/megaplan-work-pressure.js" />
     </web-resource>
     <webwork1 key="mega-pressure-actions" name="Mega Pressure plugin actions">
@@ -15,14 +17,14 @@
         </actions>
     </webwork1>
 
-    <component-import key="megaplan-permission-group-manager-import" name="Permission Manager service"
+    <!-- <component-import key="megaplan-permission-group-manager-import" name="Permission Manager service"
                       interface="ru.megaplan.jira.plugins.permission.manager.ao.MegaPermissionGroupManager">
         <description>Component to access Active Objects functionality from the plugin</description>
-    </component-import>
+    </component-import>  -->
 
     <servlet-filter name="Mega work pressure Servlet Filter" key="megaWorkPressureServletFilter"
                     class="ru.megaplan.jira.plugins.megaworkpressure.servlet.filter.UserPressureServletFilter"
-                    location="before-decoration" weight="200">
+                    location="before-decoration" weight="900">
         <description>Mega work pressure Servlet Filter.</description>
         <url-pattern>/secure/*</url-pattern>
         <init-param>
