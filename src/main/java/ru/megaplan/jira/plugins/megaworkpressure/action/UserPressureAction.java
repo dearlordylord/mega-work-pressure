@@ -37,7 +37,6 @@ public class UserPressureAction extends JiraWebActionSupport {
     private final SearchService searchService;
 
     Issue[] issues;
-    //private final String baseUrl;
 
     public UserPressureAction(UserManager userManager, JiraAuthenticationContext jiraAuthenticationContext,
     PermissionManager permissionManager, UserProjectHistoryManager userProjectHistoryManager, SearchService searchService

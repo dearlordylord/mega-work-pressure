@@ -31,12 +31,12 @@
             <version>3.0.1</version>
             <scope>provided</scope>
         </dependency>
-     <!--   <dependency>
+        <dependency>
             <groupId>ru.megaplan.jira.plugins</groupId>
             <artifactId>megaplan-permission-manager</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>provided</scope>
-        </dependency>    -->
+        </dependency>
         <dependency>
             <groupId>com.atlassian.activeobjects</groupId>
             <artifactId>activeobjects-plugin</artifactId>
@@ -84,13 +84,13 @@
                     <productVersion>${jira.version}</productVersion>
                     <productDataVersion>${jira.version}</productDataVersion>
                     <jvmArgs>-Dfile.encoding=UTF-8</jvmArgs>
-                  <!--  <pluginArtifacts>
+                    <pluginArtifacts>
                         <pluginArtifact>
                             <groupId>ru.megaplan.jira.plugins</groupId>
                             <artifactId>megaplan-permission-manager</artifactId>
                             <version>1.0-SNAPSHOT</version>
                         </pluginArtifact>
-                    </pluginArtifacts>  -->
+                    </pluginArtifacts>
                 </configuration>
             </plugin>
             <plugin>
