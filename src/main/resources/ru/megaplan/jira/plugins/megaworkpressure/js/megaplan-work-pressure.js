@@ -15,7 +15,8 @@
     var pressureHtml = fieldGroupDiv.append(pressureLink);
     var dialog;
 
-    jQuery(document).delegate(assigneeFieldSelector,"click", function() {
+    jQuery(document).delegate(assigneeFieldSelector,"click", init);
+    function init() {
         actionRef = AJS.params.baseURL + "/secure/UserPressureAction.jspa";
         if (!dialog) dialog =
             new JIRA.FormDialog({
@@ -31,7 +32,7 @@
             });
         var ascentorDiv = jQuery(assigneeFieldSelector).closest('div.field-group');
         pressureHtml.insertAfter(ascentorDiv);
-    });
+    }
     jQuery(document).delegate("#assignee-suggestions a","click", function(){
         var pr = jQuery('#pressure-link');
         pr.hover(function() {
@@ -49,6 +50,7 @@
        pressureLink.attr('href',actionRef);
     });
     jQuery(document).delegate('#assign-to-me-trigger','click', function() {
+        init();
         var pr = jQuery('#pressure-link');
         pr.unbind('mouseenter mouseleave');
         var name = jQuery('#assignee-field').val();
@@ -58,6 +60,7 @@
         }
         name = '?user=' + name;
         pr.attr('href', actionRef + name);
+        pressureHtml.show();
     });
 
 
