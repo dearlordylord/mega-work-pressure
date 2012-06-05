@@ -33,7 +33,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class UserPressureServletFilter implements Filter {
 
     private static final Logger log = Logger.getLogger(UserPressureServletFilter.class);
-    private final Set<String> allowedLogins;
+    private final Set<String> allowedLogins = new HashSet<String>();
+    private final Set<String> allowedProjects = new HashSet<String>();
     private final JiraAuthenticationContext jiraAuthenticationContext;
     private final WebResourceManager webResourceManager;
     private final MegaPermissionGroupManager megaPermissionGroupManager;
@@ -49,7 +50,6 @@ public class UserPressureServletFilter implements Filter {
         this.webResourceManager = webResourceManager;
         this.megaPermissionGroupManager = megaPermissionGroupManager;
         this.userProjectHistoryManager = userProjectHistoryManager;
-        allowedLogins = new HashSet<String>();
     }
 
     @Override
@@ -58,8 +58,10 @@ public class UserPressureServletFilter implements Filter {
        checkNotNull(pg);
         for (IPermissionMock permissionMock : pg.getPermissions()) {
             if (permissionMock.getUserName() != null) {
-                log.warn("adding name : " + permissionMock.getUserName());
                 allowedLogins.add(permissionMock.getUserName());
+            }
+            if (permissionMock.getProjectKey() != null) {
+                allowedProjects.add(permissionMock.getProjectKey());
             }
         }
     }
@@ -68,15 +70,11 @@ public class UserPressureServletFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         try {
             User u = jiraAuthenticationContext.getLoggedInUser();
-            Project p = userProjectHistoryManager.getCurrentProject(Permissions.CREATE_ISSUE, u);
-            if (p.getKey().equals("MP")) {
-                log.warn("MP FOUND");
-            }
-            //if (u != null && allowedLogins.contains(u.getName())) {
+            if (u != null && allowedLogins.contains(u.getName())) {
                 webResourceManager.requireResource("com.atlassian.auiplugin:ajs");
                 webResourceManager.requireResource("jira.webresources:jira-global");
                 webResourceManager.requireResource(MAINJS_RESOURCEKEY);
-           // }
+            }
         } catch (Exception e) {
             log.error("Mega Pressure servlet filter ist kaputt");
             log.error(e);

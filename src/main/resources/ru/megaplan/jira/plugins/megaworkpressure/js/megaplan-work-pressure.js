@@ -17,6 +17,8 @@
 
     jQuery(document).delegate(assigneeFieldSelector,"click", init);
     function init() {
+        var projectKey = jQuery('#assignee-container fieldset.hidden.parameters input').attr('value');
+        if (!(projectKey == 'MP' || projectKey == 'PU2')) return;
         actionRef = AJS.params.baseURL + "/secure/UserPressureAction.jspa";
         if (!dialog) dialog =
             new JIRA.FormDialog({
@@ -32,6 +34,7 @@
             });
         var ascentorDiv = jQuery(assigneeFieldSelector).closest('div.field-group');
         pressureHtml.insertAfter(ascentorDiv);
+
     }
     jQuery(document).delegate("#assignee-suggestions a","click", function(){
         var pr = jQuery('#pressure-link');
@@ -62,6 +65,8 @@
         pr.attr('href', actionRef + name);
         pressureHtml.show();
     });
+
+
 
 
 })();
