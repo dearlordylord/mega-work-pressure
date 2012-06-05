@@ -9,15 +9,17 @@
     var pressureLink = jQuery('<a/>',{
            href : actionRef,
            text : 'Задачи на этом пользователе',
-           id : 'pressure-link'
+           id : 'pressure-link',
        }).addClass('trigger-dialog');
 
     var pressureHtml = fieldGroupDiv.append(pressureLink);
     var dialog;
+    var projectKey;
+    var priority;
 
     jQuery(document).delegate(assigneeFieldSelector,"click", init);
     function init() {
-        var projectKey = jQuery('#assignee-container fieldset.hidden.parameters input').attr('value');
+        projectKey = jQuery('#assignee-container fieldset.hidden.parameters input').attr('value');
         if (!(projectKey == 'MP' || projectKey == 'PU2')) return;
         actionRef = AJS.params.baseURL + "/secure/UserPressureAction.jspa";
         if (!dialog) dialog =
@@ -37,6 +39,7 @@
 
     }
     jQuery(document).delegate("#assignee-suggestions a","click", function(){
+        if (!dialog) init();
         var pr = jQuery('#pressure-link');
         pr.hover(function() {
             var option = jQuery('#assignee-single-select li.active a');
@@ -47,6 +50,8 @@
             } else {
                 name = '?user=' + name[1];
             }
+            priority = jQuery('select#priority').val();
+            name = name + "&project=" + projectKey + "&priority=" + priority;
             pr.attr('href', actionRef + name);
         });
        pressureHtml.show();
@@ -62,6 +67,8 @@
             return;
         }
         name = '?user=' + name;
+        name = name + "&project=" + projectKey;
+        name = name + "&priority=" + priority;
         pr.attr('href', actionRef + name);
         pressureHtml.show();
     });

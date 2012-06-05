@@ -7,14 +7,30 @@
             <th class="colHeaderLink headerrow-status">Status</th>
         </tr>
     </thead>
+#macro(dummy)
+ <tr class="issuerow">
+     <td class="nav priority"><img src="$baseurl$priority.iconUrlHtml"/></td>
+     <td class="nav issuekey" style="background-color:#326CA6;">-</td>
+     <td class="nav summary" style="background-color:#326CA6;">-</td>
+     <td class="nav status">Not opened yet</td>
+ </tr>
+#end
     <tbody>
+        #set($moreThanPrevious = 0)
         #foreach($issue in $issues)
+            #if ($moreThanPrevious == 0)
+                #if ($issue.priorityObject.getSequence().compareTo($priority.getSequence()) > 0)
+                    #dummy()
+                    #set($moreThanPrevious = 1)
+                #end
+            #end
             <tr class="issuerow">
                 <td class="nav priority"><img src="$baseurl$issue.priorityObject.iconUrlHtml"/></td>
-                <td class="nav issuekey"><a href="$baseurl/browse/$issue.key">$issue.key</a></td>
-                <td class="nav summary"><a href="$baseurl/browse/$issue.key">$issue.summary</a></td>
+                <td class="nav issuekey"><a target="_blank" href="$baseurl/browse/$issue.key">$issue.key</a></td>
+                <td class="nav summary"><a target="_blank" href="$baseurl/browse/$issue.key">$issue.summary</a></td>
                 <td class="nav status"><img src="$baseurl$issue.statusObject.iconUrlHtml"/>$issue.statusObject.nameTranslation</td>
             </tr>
         #end
+        #if ($moreThanPrevious ==0) #dummy() #end
     </tbody>
 </table>

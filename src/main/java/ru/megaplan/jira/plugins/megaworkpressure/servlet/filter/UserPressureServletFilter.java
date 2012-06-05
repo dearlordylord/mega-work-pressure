@@ -58,6 +58,7 @@ public class UserPressureServletFilter implements Filter {
        checkNotNull(pg);
         for (IPermissionMock permissionMock : pg.getPermissions()) {
             if (permissionMock.getUserName() != null) {
+                log.warn("alloweeed");
                 allowedLogins.add(permissionMock.getUserName());
             }
             if (permissionMock.getProjectKey() != null) {
