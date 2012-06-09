@@ -49,6 +49,11 @@ public class UserPressureAction extends JiraWebActionSupport {
 
     Issue[] issues;
     Priority priority;
+    Priority[] priorities;
+
+    public Priority[] getPriorities() {
+        return priorities;
+    }
 
     public UserPressureAction(UserManager userManager, JiraAuthenticationContext jiraAuthenticationContext,
     PermissionManager permissionManager, UserProjectHistoryManager userProjectHistoryManager, SearchService searchService,
@@ -88,7 +93,8 @@ public class UserPressureAction extends JiraWebActionSupport {
         }
         List<Issue> lissues = results.getIssues();
         issues = lissues.toArray(new Issue[lissues.size()]);
-
+        List<Priority> priorities = priorityManager.getPriorities();
+        this.priorities = priorities.toArray(new Priority[priorities.size()]);
 //        SearchService.ParseResult parseResult = searchService.
 //        parseQuery(loggedInUser, jqlQuery);
 //        if (parseResult.isValid()) {
