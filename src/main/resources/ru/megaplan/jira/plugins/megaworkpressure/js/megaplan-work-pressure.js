@@ -73,6 +73,23 @@
         pressureHtml.show();
     });
 
+    jQuery(document).delegate('#priority-change-pipka', 'change', function(pr) {
+        var newPriority = jQuery(pr.target[pr.target.selectedIndex]).val();
+        var nextElement = jQuery(jQuery('.dummyissue').next());
+        bubbleDown(pr, nextElement);
+        function bubbleDown(prevElement, nextElement) {
+            var nextPriority = parseInt(nextElement.attr('class'));
+            console.warn(nextElement.next());
+            if (nextPriority > newPriority || !nextPriority || isNaN(nextPriority)) calmHere(prevElement, nextElement);
+            else
+            bubbleDown(nextElement, jQuery(nextElement.next()));
+        }
+        function calmHere(prevElement, nextElement) {
+            if (isNaN(nextElement) || !nextElement) nextElement = prevElement;
+            console.warn('I calm : ' + jQuery(nextElement).attr('class'));
+        }
+    });
+
 
 
 

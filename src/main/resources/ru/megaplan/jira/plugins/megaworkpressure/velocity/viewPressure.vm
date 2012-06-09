@@ -8,8 +8,18 @@
         </tr>
     </thead>
 #macro(dummy)
- <tr class="issuerow">
-     <td class="nav priority"><img src="$baseurl$priority.iconUrlHtml"/></td>
+ <tr class="${priority.sequence}priority issuerow dummyissue">
+     <!-- <td class="nav priority"><img src="$baseurl$priority.iconUrlHtml"/></td>  -->
+     <td class="nav priority">
+        <select id="priority-change-pipka">
+         #foreach($prior in $priorities)
+            <option value=$prior.sequence
+            #if ($prior.sequence == $priority.sequence) selected="true" #end
+            >
+            $prior.name</option>
+         #end
+        </select>
+     </td>
      <td class="nav issuekey" style="background-color:#326CA6;">-</td>
      <td class="nav summary" style="background-color:#326CA6;">-</td>
      <td class="nav status">Not opened yet</td>
@@ -24,7 +34,7 @@
                     #set($moreThanPrevious = 1)
                 #end
             #end
-            <tr class="issuerow">
+            <tr class="${issue.priorityObject.sequence}priority  issuerow pipka">
                 <td class="nav priority"><img src="$baseurl$issue.priorityObject.iconUrlHtml"/></td>
                 <td class="nav issuekey"><a target="_blank" href="$baseurl/browse/$issue.key">$issue.key</a></td>
                 <td class="nav summary"><a target="_blank" href="$baseurl/browse/$issue.key">$issue.summary</a></td>
