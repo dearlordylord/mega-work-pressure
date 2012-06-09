@@ -10,38 +10,19 @@ import com.atlassian.jira.issue.search.SearchException;
 import com.atlassian.jira.issue.search.SearchProvider;
 import com.atlassian.jira.issue.search.SearchProviderFactory;
 import com.atlassian.jira.issue.search.SearchResults;
-import com.atlassian.jira.issue.statistics.util.DocumentHitCollector;
-import com.atlassian.jira.issue.views.AbstractIssueHtmlView;
-import com.atlassian.jira.issue.views.IssueHtmlView;
-import com.atlassian.jira.issue.views.util.IssueWriterHitCollector;
-import com.atlassian.jira.issue.views.util.SearchRequestViewUtils;
 import com.atlassian.jira.jql.builder.JqlQueryBuilder;
-import com.atlassian.jira.plugin.issueview.IssueViewFieldParams;
-import com.atlassian.jira.plugin.searchrequestview.SearchRequestParams;
 import com.atlassian.jira.project.Project;
 import com.atlassian.jira.project.ProjectManager;
 import com.atlassian.jira.security.JiraAuthenticationContext;
 import com.atlassian.jira.security.PermissionManager;
-import com.atlassian.jira.security.Permissions;
 import com.atlassian.jira.user.UserProjectHistoryManager;
 import com.atlassian.jira.user.util.UserManager;
-import com.atlassian.jira.util.JiraVelocityUtils;
 import com.atlassian.jira.web.action.JiraWebActionSupport;
 import com.atlassian.jira.web.bean.PagerFilter;
 import com.atlassian.query.Query;
 import com.atlassian.query.order.SortOrder;
 import com.atlassian.velocity.VelocityManager;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Searcher;
-import org.apache.velocity.exception.VelocityException;
-import webwork.action.ServletActionContext;
-
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.

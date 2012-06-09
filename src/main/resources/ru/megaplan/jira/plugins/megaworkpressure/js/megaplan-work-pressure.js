@@ -4,7 +4,6 @@
     }).addClass('field-group');
     var actionRef;
     var assigneeFieldSelector = '#assignee-field';
-    var assigneeField = jQuery(assigneeFieldSelector);
     var findUsername = /\(([^()]*)\)$/;
     var pressureLink = jQuery('<a/>',{
            href : actionRef,
@@ -19,29 +18,34 @@
 
     jQuery(document).delegate(assigneeFieldSelector,"click", init);
     function init() {
+
+        if (!dialog) {
+           dialog = new JIRA.FormDialog({
+              trigger: pressureLink,
+              id: pressureLink.id + "-dialog",
+              ajaxOptions: {
+                  url: pressureLink.href,
+                  data: {
+                      decorator: "dialog",
+                      inline: "true",
+                  }
+              }
+            });
+        }
         projectKey = jQuery('#assignee-container fieldset.hidden.parameters input').attr('value');
         if (!(projectKey == 'MP' || projectKey == 'PU2')) return;
         actionRef = AJS.params.baseURL + "/secure/UserPressureAction.jspa";
-        if (!dialog) dialog =
-            new JIRA.FormDialog({
-                trigger: pressureLink,
-                id: pressureLink.id + "-dialog",
-                ajaxOptions: {
-                    url: pressureLink.href,
-                    data: {
-                        decorator: "dialog",
-                        inline: "true",
-                    }
-                }
-            });
+
         var ascentorDiv = jQuery(assigneeFieldSelector).closest('div.field-group');
         pressureHtml.insertAfter(ascentorDiv);
 
     }
-    jQuery(document).delegate("#assignee-suggestions a","click", function(){
+    jQuery(document).delegate("#assignee-suggestions","click", function(){
         if (!dialog) init();
         var pr = jQuery('#pressure-link');
-        pr.hover(function() {
+        pr.hover(initHover);
+        function initHover() {
+            var pr = jQuery('#pressure-link');
             var option = jQuery('#assignee-single-select li.active a');
             var name = findUsername.exec(option.attr('title'));
             if (!name) {
@@ -50,10 +54,11 @@
             } else {
                 name = '?user=' + name[1];
             }
+
             priority = jQuery('select#priority').val();
             name = name + "&project=" + projectKey + "&priority=" + priority;
             pr.attr('href', actionRef + name);
-        });
+        }
        pressureHtml.show();
        pressureLink.attr('href',actionRef);
     });
