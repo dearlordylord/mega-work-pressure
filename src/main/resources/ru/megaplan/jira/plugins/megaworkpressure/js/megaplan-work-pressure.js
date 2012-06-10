@@ -80,19 +80,50 @@
 
     jQuery(document).delegate('#priority-change-pipka', 'change', function(pr) {
         var newPriority = jQuery(pr.target[pr.target.selectedIndex]).val();
-        var nextElement = jQuery(jQuery('.dummyissue').next());
-        bubbleDown(pr, nextElement);
-        function bubbleDown(prevElement, nextElement) {
-            var nextPriority = parseInt(nextElement.attr('class'));
-            console.warn(nextElement.next());
-            if (nextPriority > newPriority || !nextPriority || isNaN(nextPriority)) calmHere(prevElement, nextElement);
-            else
-            bubbleDown(nextElement, jQuery(nextElement.next()));
+        var element = jQuery('.dummyissue');
+        var nextElement = jQuery(element.next());
+        var previousElement = jQuery(element.prev());
+        var nextPriority = getPriority(nextElement);
+        var previousPriority = getPriority(previousElement);
+        if (nextElement && nextPriority <= newPriority) {
+            while(nextPriority <= newPriority) {
+                var next = jQuery(nextElement.next());
+                nextPriority = getPriority(next);
+                if (!isNaN(nextPriority)) nextElement = next;
+                else break;
+            }
+            if (!isNaN(nextPriority)) {
+                var checkPriority = getPriority(nextElement);
+                while (!isNaN(checkPriority)) {
+                    nextElement = nextElement.next();
+                    checkPriority = getPriority(nextElement);
+                }
+            }
+            element.insertAfter(nextElement);
+        } else if (previousElement && previousPriority > newPriority) {
+            var after = true;
+            while(previousPriority > newPriority) {
+               var previous = jQuery(jQuery(previousElement).prev());
+               previousPriority = getPriority(previous);
+               if (!isNaN(previousPriority)) previousElement = previous;
+               else {
+                   after = false;
+                   break;
+               }
+           }
+           if (after) element.insertAfter(previousElement);
+           else element.insertBefore(previousElement);
         }
-        function calmHere(prevElement, nextElement) {
-            if (isNaN(nextElement) || !nextElement) nextElement = prevElement;
-            console.warn('I calm : ' + jQuery(nextElement).attr('class'));
+
+        jQuery('select#priority').val(newPriority);
+
+        function getPriority(element) {
+            return parseInt(element.attr('class'));
         }
+
+
+
+
     });
 
 
