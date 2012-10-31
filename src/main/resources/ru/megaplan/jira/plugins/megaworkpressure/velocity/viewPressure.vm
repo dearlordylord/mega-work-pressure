@@ -1,0 +1,92 @@
+#if($dateFormat)
+    <script>(function(){AJS.params['workpressure.date.format'] = "$dateFormat"})()</script>
+#end
+#if($nonWorkingDates)
+    <script>(function(){
+    AJS.params['workpressure.non.working.intervals'] = [
+    #foreach($nonWorkingInterval in $nonWorkingDates)
+        {begin: new Date($nonWorkingInterval.startDate.time), end: new Date($nonWorkingInterval.endDate.time)},
+    #end
+    ];
+    })()</script>
+#end
+#if($hoursPerDay)
+    <script>(function(){
+        AJS.params['workpressure.hours.per.day'] = $hoursPerDay;
+    })()</script>
+#end
+#if($daysPerWeek)
+    <script>(function(){
+        AJS.params['workpressure.days.per.week'] = $daysPerWeek;
+    })()</script>
+#end
+
+
+<table id="work-pressure-issuetable">
+    <thead>
+        <tr class="rowheader">
+            <th class="active descending headerrow-priority">P</th>
+            <th class="colHeaderLink headerrow-issuekey">Key</th>
+            <th class="colHeaderLink">Оценка</th>
+            <th class="colHeaderLink">Начало</th>
+            <th class="colHeaderLink">Конец</th>
+            <th class="colHeaderLink headerrow-summary">Задача</th>
+            <th class="colHeaderLink headerrow-status">Статус</th>
+        </tr>
+    </thead>
+    <tfoot>
+    	<tr>
+    	  <td></td>
+    	</tr>
+    </tfoot>
+#macro(dummy)
+ <tr class="${priority.sequence}priority issuerow dummyissue">
+     <!-- <td class="nav priority"><img src="$baseurl$priority.iconUrlHtml"/></td>  -->
+     <td class="nav priority">
+        <select id="priority-change-pipka">
+         #foreach($prior in $priorities)
+            <option value=$prior.sequence
+            #if ($prior.sequence == $priority.sequence) selected="true" #end
+            >
+            $prior.name</option>
+         #end
+        </select>
+     </td>
+     <td class="nav issuekey" style="background-color:#326CA6;">-</td>
+     <td class="nav pressure-estimate" style="background-color:#326CA6;">
+        <input type="text" id="dummy-estimate"></input>
+        <select id="dummy-time-granularity">
+            <option value="d">дн.</option>
+            <option value="h" selected>ч.</option>
+            <option value="m">мин.</option>
+        </select>
+     </td>
+     <td class="nav pressure-begin" style="background-color:#326CA6;">-</td>
+     <td class="nav pressure-end" style="background-color:#326CA6;">-</td>
+     <td id='dummy-summary' class="nav summary" style="background-color:#326CA6;color:white;">Моя задача</td>
+     <td class="nav status">Еще не открыта</td>
+ </tr>
+#end
+    <tbody>
+        #set($moreThanPrevious = 0)
+        #dummy()
+        #foreach($issue in $issues)
+            #if ($moreThanPrevious == 0)
+                #if ($issue.priorityObject.getSequence().compareTo($priority.getSequence()) > 0)
+
+                    #set($moreThanPrevious = 1)
+                #end
+            #end
+            <tr class="${issue.priorityObject.sequence}priority issuerow pipka">
+                <td class="nav priority"><img src="$baseurl$issue.priorityObject.iconUrlHtml"/></td>
+                <td class="nav issuekey"><a target="_blank" href="$baseurl/browse/$issue.key">$issue.key</a></td>
+                <td class="nav pressure-estimate">#if($issue.estimate) $megaFormatter.getPrettyHours($issue.estimate) #end</td>
+                <td class="nav pressure-begin"></td>
+                <td class="nav pressure-end"></td>
+                <td class="nav summary"><a target="_blank" href="$baseurl/browse/$issue.key">$issue.summary</a></td>
+                <td class="nav status"><img src="$baseurl$issue.statusObject.iconUrlHtml"/>$issue.statusObject.nameTranslation</td>
+            </tr>
+        #end
+        ##if ($moreThanPrevious ==0) #dummy() #end
+    </tbody>
+</table>

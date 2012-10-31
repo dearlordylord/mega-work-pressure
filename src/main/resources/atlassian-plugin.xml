@@ -1,0 +1,138 @@
+<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}" plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}" />
+    </plugin-info>
+    <web-resource key="megaplan-work-pressure-mainjs" name="Mainjs" >
+        <resource type="download" name="megaplan-work-pressure.js" location="ru/megaplan/jira/plugins/megaworkpressure/js/megaplan-work-pressure.js" />
+    </web-resource>
+    <web-resource key="megaplan-work-pressure-css" name="IssuetableCss" >
+        <resource type="download" name="work-pressure.css" location="ru/megaplan/jira/plugins/megaworkpressure/css/work-pressure.css" />
+    </web-resource>
+    <web-resource key="oppression-gadget-css" name="OppressionCss" >
+        <resource type="download" name="oppression-gadget.css" location="ru/megaplan/jira/plugins/megaworkpressure/css/oppression-gadget.css" />
+    </web-resource>
+    <web-resource key="mega-work-pressure-fixedheadertable" name="FixedTableHeader" >
+        <resource type="download" name="fixed-header-table.js" location="ru/megaplan/jira/plugins/megaworkpressure/js/fixed-header-table.js" />
+    </web-resource>
+
+    <webwork1 key="mega-pressure-actions" name="Mega Pressure plugin actions">
+        <actions>
+           <!-- <action name="ru.megaplan.jira.plugins.megaworkpressure.action.UserPressureAction" alias="UserPressureAction">
+                <view name="success">/ru/megaplan/jira/plugins/megaworkpressure/velocity/viewPressure.vm</view>
+                <view name="error">/ru/megaplan/jira/plugins/megaworkpressure/velocity/viewPressureError.vm</view>
+            </action>  -->
+            <action name="ru.megaplan.jira.plugins.megaworkpressure.action.UserPressureAssignAction" alias="UserPressureAssignAction">
+                <view name="default">/ru/megaplan/jira/plugins/megaworkpressure/velocity/pressureAssign.vm</view>
+                <view name="input">/ru/megaplan/jira/plugins/megaworkpressure/velocity/pressureAssign.vm</view>
+            </action>
+        </actions>
+    </webwork1>
+
+    <component-import key="megaplan-permission-group-manager-import" name="Permission Manager service"
+                      interface="ru.megaplan.jira.plugins.permission.manager.ao.MegaPermissionGroupManager">
+        <description>Component to access Mega Permissions</description>
+    </component-import>
+
+    <component-import key="workflow-search" interface="ru.megaplan.jira.plugins.history.search.HistorySearchManager"/>
+
+    <component-import key="megaplan-logic-manager-import" name="Logic Manager service"
+                      interface="ru.megaplan.jira.plugins.logicus.MegaBusinessLogicManager">
+        <description>Component to access Mega Logic</description>
+    </component-import>
+
+    <servlet-filter name="Mega work pressure Servlet Filter" key="megaWorkPressureServletFilter"
+                    class="ru.megaplan.jira.plugins.megaworkpressure.servlet.filter.UserPressureServletFilter"
+                    location="before-decoration" weight="900">
+        <description>Mega work pressure Servlet Filter.</description>
+        <url-pattern>/secure/AssignIssue!default.jspa</url-pattern>
+        <init-param>
+            <param-name>defaultName</param-name>
+            <param-value>Australia</param-value>
+        </init-param>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+    </servlet-filter>
+
+    <component key="mega-work-pressure-date-ranger"
+               name="Meg Work Pressure date ranger service"
+               class="ru.megaplan.jira.plugins.megaworkpressure.util.impl.DateRangerImpl"/>
+    <component key="mega-work-pressure-formatter"
+               name="Mega Work Pressure formatter service"
+               class="ru.megaplan.jira.plugins.megaworkpressure.util.impl.MegaFormatterImpl"/>
+    <component key="mega-work-pressure-service"
+               name="Mega Work Pressure service"
+               class="ru.megaplan.jira.plugins.megaworkpressure.service.OppressionServiceImpl"/>
+
+    <rest key="gadgetRESTpoints" path="/pressure" version="1.0" description="Provides REST endpoints used to display gadget contents.">
+    </rest>
+
+    <gadget key="oppression-gadget" name="Oppression gadget" location="ru/megaplan/jira/plugins/megaworkpressure/gadget/oppression-gadget.xml">
+        <param name="roles-required">browse</param>
+        <resource type="download" name="oppression-screenshot.png" location="ru/megaplan/jira/plugins/megaworkpressure/images/oppression-screenshot.png"/>
+        <resource type="download" name="oppression-thumb.png" location="ru/megaplan/jira/plugins/megaworkpressure/images/oppression-thumb.png"/>
+    </gadget>
+
+    <web-resource key="pickers" name="Picker" >
+        <resource type="download" name="picker.js" location="ru/megaplan/jira/plugins/megaworkpressure/js/picker.js" />
+    </web-resource>
+
+    <web-resource key="userpicker" name="User Picker" >
+        <resource type="download" name="user-autocomplete-picker.js" location="ru/megaplan/jira/plugins/megaworkpressure/js/user-autocomplete-picker.js" />
+    </web-resource>
+
+    <web-resource key="customfieldjs" name="Oppression custom field js" >
+        <resource type="download" name="oppression-customfieldjs.js" location="ru/megaplan/jira/plugins/megaworkpressure/js/oppression-customfieldjs.js" />
+    </web-resource>
+
+    <web-resource key="oppression-assignee-table" name="Oppression Assignee Table" >
+        <context>atl.general</context>
+        <resource type="download" name="oppressionAssigneeTable.js" location="ru/megaplan/jira/plugins/megaworkpressure/js/oppressionAssigneeTable.js" />
+        <resource type="download" name="oppressionTimeFormatter.js" location="ru/megaplan/jira/plugins/megaworkpressure/js/oppressionTimeFormatter.js" />
+    </web-resource>
+
+    <customfield-type key="userPriorities" name="User Priorities"
+                      class="ru.megaplan.jira.plugins.megaworkpressure.customfield.OppressionPriorityCFType">
+        <description>A custom field for oppression priorities.</description>
+        <resource type="velocity" name="view" location="templates/plugins/fields/view/view-number.vm"/>
+        <resource type="velocity" name="edit" location="ru/megaplan/jira/plugins/megaworkpressure/velocity/priorityCfEdit.vm"/>
+        <resource type="velocity" name="xml" location="templates/plugins/fields/xml/xml-number.vm"/>
+    </customfield-type>
+
+    <component-import key="eventPublisher" interface="com.atlassian.event.api.EventPublisher"/>
+
+    <component key="oppressionPriorityChangeListener" class="ru.megaplan.jira.plugins.megaworkpressure.listener.OppressionPriorityChangeListener">
+    </component>
+
+    <web-resource key="init-pressure-assign-dialog" name="init-pressure-assign-dialog">
+        <context>atl.general</context>
+        <resource type="download" name="initPressureAssignDialog.js" location="/ru/megaplan/jira/plugins/megaworkpressure/js/initPressureAssignDialog.js"/>
+    </web-resource>
+
+    <web-resource key="init-pressure-priority-table" name="init-pressure-priority-table">
+        <resource type="download" name="initPressurePriorityTableOnAssign.js" location="/ru/megaplan/jira/plugins/megaworkpressure/js/initPressurePriorityTableOnAssign.js"/>
+    </web-resource>
+
+    <web-resource key="init-user-picker" name="init-user-picker">
+        <context>atl.general</context>
+        <resource type="download" name="initUserPicker.js" location="/ru/megaplan/jira/plugins/megaworkpressure/js/initUserPicker.js"/>
+    </web-resource>
+
+    <web-item key="oppressionAssignButton" name="Oppression Assign Button" section="operations-top-level" weight="5">
+        <label>Назначить</label>
+        <link linkId="oppression-assign-issue-link">/secure/UserPressureAssignAction!default.jspa?#if(${issue})id=${issue.id}#end</link>
+        <styleClass>oppression-assign-issue-link</styleClass>
+        <condition class="com.atlassian.jira.plugin.webfragment.conditions.HasIssuePermissionCondition">
+            <param name="permission">assign</param>
+        </condition>
+        <condition class="com.atlassian.jira.plugin.webfragment.conditions.IsIssueEditableCondition"/>
+        <condition class="com.atlassian.jira.plugin.webfragment.conditions.IsFieldHiddenCondition" invert="true">
+            <param name="field">assignee</param>
+        </condition>
+        <condition class="ru.megaplan.jira.plugins.megaworkpressure.condition.ChangePriorityCondition">
+        </condition>
+    </web-item>
+
+</atlassian-plugin>

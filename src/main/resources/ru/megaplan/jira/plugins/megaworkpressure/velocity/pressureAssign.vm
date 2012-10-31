@@ -1,0 +1,66 @@
+<html>
+<head>
+    <meta name="decorator" content="issueaction">
+    <title>Назначить</title>
+</head>
+<body>
+
+
+<form id="pressure-priority-form" method="post" class="aui"
+      action="${req.contextPath}/secure/UserPressureAssignAction.jspa?id=$issue.id">
+      <table >
+          <tbody>
+              <tr>
+                  <td>
+                      <select data-container-class="long-field" data-user-type="assignee" data-show-dropdown-button="true"
+                              class="single-user-picker custom-assignee-picker" name="assignee" id="assignee" style="display: none;"
+                              multiple="">
+                          <optgroup data-weight="0" label="Suggestions" id="assignee-group-suggested">
+                              #if ($assignee)
+                                  <option data-field-label="$assignee" data-field-text="$assignee" value="$assignee"
+                                      selected="selected">$assignee
+                                  </option>
+                              #else
+                                  <option data-field-label="$remoteUser.name" data-field-text="$remoteUser.name" value="$remoteUser.name"
+                                      selected="selected">$remoteUser.name
+                                  </option>
+                              #end
+                          </optgroup>
+                      </select>
+                      <div class="description">Выбор назначаемого</div>
+                      #if ($action.getErrors().get("assignee"))
+                          <div class="error">$textutils.htmlEncode($action.getErrors().get("assignee"))</div>
+                      #end
+                  </td>
+              </tr>
+          </tbody>
+      </table>
+    <div class="form-body">
+
+        <h2>Назначить</h2>
+
+        #foreach($error in $errorMessages)<div class="aui-message error"><span class="error-icon"></span>$error</div>#end
+
+
+        <input type="hidden" name="candidateIssuePosition" value="0"></input>
+        <input type="hidden" name="atl_token" value="$atl_token">
+        <div id="pressure-priority-table"></div>
+    </div>
+
+
+
+    <div class="buttons-container form-footer">
+        <div class="buttons">
+            <input class="button submit" type="submit" value="${i18n.getText('common.words.save')}" >
+            <a accesskey="`" class="cancel" href="#" id="cancel-button" title="${i18n.getText('common.words.cancel')}">${i18n.getText("common.words.cancel")}</a>
+        </div>
+    </div>
+
+</form>
+
+<script type="text/javascript" src="$userPickerUrl"></script>
+<script type="text/javascript" src="$tableScriptUrl"></script>
+<script>JIRA.trigger("assigneePickerRefresh", [jQuery("#pressure-priority-table"), "oppressionRefreshed"]);</script>
+
+</body>
+</html>

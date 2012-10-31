@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Module>
+    <ModulePrefs title="Oppression gadget" directory_title="Oppression gadget" description="Oppression gadget for oppression"
+                 author="Megaplan" author_affiliation="Megaplan"
+                 author_location="Moscow, Erefia" height="100"
+                 screenshot='#staticResourceUrl("ru.megaplan.jira.plugins.mega-work-pressure:oppression-gadget", "oppression-screenshot.png")'
+                 thumbnail='#staticResourceUrl("ru.megaplan.jira.plugins.mega-work-pressure:oppression-gadget", "oppression-thumb.png")'>
+        <Optional feature="gadget-directory">
+            <Param name="categories">
+                JIRA
+            </Param>
+        </Optional>
+        <Require feature="setprefs" />
+        <Require feature="views" />
+        <Optional feature="atlassian.util" />
+        <Optional feature='auth-refresh' />
+        <Require feature="settitle"/>
+        <Require feature="dynamic-height"/>
+        <Require feature="oauthpopup" />
+        #oauth
+        #supportedLocales("gadget.common,gadget.stats")
+    </ModulePrefs>
+    <UserPref name="isConfigured" datatype="hidden" default_value="false" />
+    <UserPref name="statuses" datatype="hidden" default_value="0"/>
+    <UserPref name="assignees" datatype="hidden" default_value="NULL"/>
+    <UserPref name="refresh" datatype="hidden" default_value="false" />
+    <Content type="html" view="profile,canvas,home">
+        <![CDATA[
+        #requireResource("com.atlassian.jira.gadgets:autocomplete")
+        #requireResource("ru.megaplan.jira.plugins.mega-work-pressure:pickers")
+        #requireResource("ru.megaplan.jira.plugins.mega-work-pressure:userpicker")
+        #requireResource("ru.megaplan.jira.plugins.mega-work-pressure:oppression-assignee-table")
+        #requireResource("ru.megaplan.jira.plugins.mega-work-pressure:oppression-gadget-css")
+
+        #includeResources()
+        <style type="text/css">
+
+        </style>
+
+        <script type="text/javascript">
+        (function ()
+        {
+            gadgets.window.setTitle("Oppressure");
+            var gadget = AJS.Gadget({
+                baseUrl: "__ATLASSIAN_BASE_URL__",
+                useOauth: "/rest/gadget/1.0/currentUser",
+                config: {
+                    descriptor: function (args)
+                    {
+
+                        var gadget = this;
+
+                        var statType = function(name)
+                        {
+                            return {
+                                userpref: name,
+                                label: gadget.getMsg("gadget.stats." + name.toLowerCase()  + ".label"),
+                                description: gadget.getMsg("gadget.stats." + name.toLowerCase()  + ".description"),
+                                type: "select",
+                                selected: gadget.getPref(name),
+                                options: args.statType.stats
+                            };
+                        };
+
+                        var option = function(type, value)
+                        {
+                            return {
+                                label:gadget.getMsg("gadget.stats." + type.toLowerCase() + "." + value.toLowerCase()  + ".label"),
+                                value: value
+                            };
+                        };
+                        return  {
+                            action: "/rest/pressure/1.0/oppression/validate",
+                            theme : function ()
+                            {
+                                if (gadgets.window.getViewportDimensions().width < 450){
+                                        return "gdt top-label";
+                                    }
+                                    else
+                                    {
+                                        return "gdt";
+                                    }
+                            }(),
+
+                            fields: [
+                                GB.gadget.fields.picker(gadget, "statuses", args.statuses, "Statuses"),
+                                GB.gadget.fields.picker(gadget, "assignees", args.assignees, "Assignees"),
+                                AJS.gadget.fields.nowConfigured()
+                            ]
+                        };
+                    },
+                    args: function() {
+                        return [
+                            {
+                                key: "statuses",
+                                ajaxOptions: "/rest/pressure/1.0/status/all"
+                            },
+                            {
+                                key: "assignees",
+                                ajaxOptions: "/rest/pressure/1.0/assignee/allActive"
+                            }
+                        ];
+                    }()
+                },
+                view: {
+                    enableReload: true,
+                    onResizeReload: true,
+                    template: function (args)
+                    {
+                        var gadget = this;
+                        var userSelectDialog;
+                        var innerTrPrefix = 'innertr-';
+
+
+
+
+                        jQuery('#statuses-head').text(gadgets.util.unescapeString(this.getPref("statuses")));
+
+                        var createAssigneeRow = function(jRow) {
+                            var outerRow = jQuery('<tr/>', {id: 'assignee-row-'+jRow.userLogin});
+                            var userTd = jQuery('<td/>',{text: jRow.username, class: "nav"});
+                            userTd.css('vertical-align','top');
+                            userTd.css('text-align','right');
+                            var outerTd = jQuery('<td/>',{class: "nav"});
+                            var assigneeTable = new AJS.Megaplan.Oppression.AssigneeTable({statuses: gadget.getPref("statuses"), gadget: gadget});
+                            var innerTable = assigneeTable.newAssigneeTable(jRow.now.issues, false);
+
+                            outerTd.append(innerTable);
+                            outerRow.append(userTd);
+                            outerRow.append(outerTd);
+
+
+                            return outerRow;
+                        }
+                        gadget.getView().empty();
+                        //gadget.getView().append(jQuery("#content").clone());
+                        var obody = jQuery('#oppression-table tbody');
+                        obody.empty();
+                        for (row in args.rows) {
+                            var tr = createAssigneeRow(args.rows[row]);
+                            obody.append(tr);
+                        }
+
+                        jQuery('#oppression-print').click(function(event) {print();return false;});
+
+                        jQuery('#template').show();
+
+                    },
+                    args: [{
+                        key: "rows",
+                        ajaxOptions: function () {
+                                return {
+                                    url: "/rest/pressure/1.0/oppression/generate",
+                                    data:  {
+                                        assignees : gadgets.util.unescapeString(this.getPref("assignees")),
+                                        statuses: gadgets.util.unescapeString(this.getPref("statuses")),
+                                    }
+                                };
+                        }
+                    }]
+                }
+            });
+        })();
+        </script>
+
+        <div id="template" style="display:none">
+            <div><a id="oppression-print" href="#">Печатать</a></div>
+            <table class="aui" id="oppression-table">
+                <thead>
+                    <tr>
+                        <th>Пользователь</th>
+                        <th>Запросы</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+
+        </div>
+        ]]>
+    </Content>
+</Module>

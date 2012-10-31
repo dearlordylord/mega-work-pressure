@@ -1,0 +1,206 @@
+#customControlHeader ($action $customField.id $customField.name $fieldLayoutItem.required $displayParameters $auiparams)
+<a href="#" target="_self" id="oppression-cf-input">Поменять приоритет</a><br/>
+<input class="text long-field" id="$customField.id" name="$customField.id" type="text" value="$textutils.htmlEncode($!value)" readonly="readonly"/>
+#customControlFooter ($action $customField.id $fieldLayoutItem.fieldDescription $displayParameters $auiparams)
+<script type="text/javascript">
+#set($bill='$')
+
+var oppressionDialog;
+
+(function() {
+
+    var defaultWorkStatus = "1|2|3|4|5";
+    var candidateIssueKey = "FAKE";
+
+
+
+    function init() {
+
+        var oppressionInputLink = jQuery('#oppression-cf-input');
+        var oppressionCfInput = oppressionInputLink.closest('div.field-group').find('input');
+        var closestContent = oppressionInputLink.closest('div.aui-popup');
+        var isCreate = (closestContent.closest("#create-issue-dialog").length > 0);
+        var assigneeContainer = closestContent.find('#assignee-container');
+        var assigneeSelect =  closestContent.find('select#assignee');
+        var assigneeInput = closestContent.find('input#assignee-field');
+
+        console.warn('init');
+        console.warn(closestContent);
+
+        var assigneeInputValue = assigneeInput.val();
+
+        function fireAssigneeInputChange() {
+            if (assigneeInputValue == assigneeInput.val()) return;
+            assigneeInputValue = assigneeInput.val();
+            assigneeInput.trigger('assigneeChanged');
+        }
+        assigneeInput.bind('assigneeChanged',function() {
+            oppressionCfInput.val(0);
+        });
+        if (assigneeSelect.length == 0) {
+            oppressionInputLink.hide();
+            return;
+        }
+        if (!(AJS.Megaplan && AJS.Megaplan.Oppression && AJS.Megaplan.Oppression.AssigneeTable)) {
+            return;
+        }
+
+        //add listeners
+        jQuery(document).on('click','#assignee-suggestions a', fireAssigneeInputChange);
+        closestContent.find('form').keydown(function(e){
+            if (e.keyCode != 13) return;
+            if (document.activeElement.id != 'assignee-field') return;
+            fireAssigneeInputChange();
+        });
+        jQuery(document).on('hover', '#oppression-cf-input', function(e) {
+            if (e.target == oppressionInputLink[0]) {
+                return;
+            }
+            oppressionInputLink = jQuery(e.target);
+            init();
+        });
+
+        //
+
+        function getAssigneeLogin() {
+            var suggested = assigneeSelect.find('option[selected="selected"]');
+            if (suggested.length == 0) {
+                suggested = assigneeSelect.find('option');
+                if (suggested.length == 0) {
+                    assigneeLogin = undefined;
+                    return;
+                }
+                return jQuery(suggested[0]).val();
+            }
+            if (suggested.val() == "-1") {
+                assigneeLogin = undefined;
+                return;
+            }
+            return suggested.val();
+        }
+
+        function getFakeIssueParamsFromForm() {
+            var data = {};
+            var oe = closestContent.find('#timetracking_originalestimate');
+            var es = closestContent.find('#timetracking_remainingestimate');
+            var estimateString = "";
+            if (es.length > 0 || oe.length > 0) {
+                if (es.length > 0 && es.val()) {
+                    estimateString = es.val();
+                } else {
+                    estimateString = oe.val();
+                }
+            }
+            data.candidateIssueTime = estimateString;
+
+            var summary = closestContent.find('#summary');
+            var candidateSummaryText = "Моя задача";
+            if (summary.length > 0) {
+                if (summary.val()) {
+                    candidateSummaryText = summary.val();
+                }
+            }
+            data.candidateIssueSummary = candidateSummaryText;
+
+            var project = closestContent.find('#project-single-select');
+            if (project.length > 0) {
+                data.candidateIssueProject = project.val();
+            }
+
+            var issueType = closestContent.find('#issuetype-field');
+            if (issueType.length > 0) {
+                data.candidateIssueType = issueType.val();
+            }
+            if (isCreate) {
+                data.candidateIssueKey = candidateIssueKey;
+            } else {
+                var id = closestContent.find('form').find('input[name="id"]').val();
+                data.candidateIssueId = id;
+            }
+
+
+            return data;
+        }
+
+        var newPriority;
+        var dialogIssuePriorityChanged = function(props) {
+            newPriority = props.newPriority;
+        }
+
+        oppressionInputLink.click(function() {
+            var login = getAssigneeLogin();
+            var oppressionTable = new AJS.Megaplan.Oppression.AssigneeTable({statuses: defaultWorkStatus,
+                                        assignees: login,
+                                         candidateIssueKey: candidateIssueKey,
+                                           isCreate: true,
+                                           fakeIssueParams: getFakeIssueParamsFromForm(),
+                                           updateFunction: dialogIssuePriorityChanged
+                                           });
+            var oppressionCfError = jQuery('#oppression-cf-error');
+            if (!login) {
+                if (oppressionCfError.length == 0) {
+                    oppressionCfError = jQuery("<span>",{text: "Не выбран назначаемый", id:'oppression-cf-error'});
+                    oppressionInputLink.after(oppressionCfError);
+                } else {
+                    oppressionCfError.show();
+                }
+            } else {
+                oppressionCfError.hide();
+                var currentPriority = parseInt(oppressionCfInput.val());
+                if (!currentPriority) currentPriority = 0;
+                var data = {
+                    statuses: defaultWorkStatus,
+                    assignees: login,
+                    candidateIssuePosition: currentPriority
+                };
+                var fakeIssueParams = getFakeIssueParamsFromForm();
+                for (var fakeParam in fakeIssueParams) {
+                    data[fakeParam] = fakeIssueParams[fakeParam];
+                }
+
+                if (oppressionDialog) oppressionDialog.remove();
+                oppressionDialog = new AJS.Dialog({
+                    width: 800,
+                    height: 400,
+                    id:"succession-dialog",
+                    closeOnOutsideClick: true
+                });
+                oppressionDialog.show();
+                oppressionDialog.disable();
+
+                oppressionDialog.addPanel("Выбор есть", "<div id='pressure-priority-table'></div>", 'main-succession-panel');
+                oppressionDialog.addSubmit("Установить приоритет", function(dialog) {
+                    if (newPriority) {
+                        oppressionCfInput.val(newPriority);
+                    } else {
+                        var insertCandidateInput = jQuery(dialog.getCurrentPanel().body).find('tr.insert-candidate input');
+                        oppressionCfInput.val(insertCandidateInput.val());
+                    }
+                    dialog.hide();
+                });
+                oppressionDialog.addCancel("Отменить", function (dialog) {
+                    dialog.hide();
+                });
+
+                AJS.${bill}.ajax({
+                    url: AJS.params.baseURL+"/rest/pressure/1.0/oppression/generate",
+                    dataType: "json",
+                    type: "GET",
+                    data: data,
+                    success: function( msg ) {
+                        var table = oppressionTable.newAssigneeTable(msg[0].now.issues, true);
+                        jQuery("#pressure-priority-table").empty().append(table);
+                        oppressionDialog.show(); // this show and enable - dirty hack that just works when create issue and update issue dialogs appears to work different ways. fuck you atlassian
+                        oppressionDialog.enable();
+                    },
+                    contentType: 'application/json'
+                });
+            }
+        });
+    }
+
+    init();
+
+
+})();
+</script>
